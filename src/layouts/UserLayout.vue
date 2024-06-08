@@ -16,6 +16,9 @@ const login = () => {
 const logout = () => {
     isLoggedIn.value = false
     localStorage.removeItem('isLoggedIn')
+    localStorage.removeItem('order-data')
+    localStorage.removeItem('cart-data')
+    location.reload()
 }
 
 onMounted(() => {

@@ -69,6 +69,7 @@ const changeQuantity = (event, index) => {
                             <div> 0</div>
                         </div>
                     </div>
+                    <RouterLink :to="{ name: 'checkout' }" class="btn btn-neutral w-full mt-4">ชำระเงิน</RouterLink>
                 </div>
             </div>
         </UserLayout>

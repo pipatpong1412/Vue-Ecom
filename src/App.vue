@@ -1,6 +1,6 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-import { useCartStore } from './stores/carts';
+import { useCartStore } from './stores/user/carts';
 import { onMounted } from 'vue';
 const cartStore = useCartStore()
 

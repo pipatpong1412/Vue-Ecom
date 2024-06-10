@@ -3,8 +3,8 @@ import UserLayout from '@/layouts/UserLayout.vue'
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import Product from '@/components/Product.vue'
-import { useProductStore } from '@/stores/product';
-import { useCartStore } from '@/stores/carts';
+import { useProductStore } from '@/stores/user/product';
+import { useCartStore } from '@/stores/user/carts';
 
 const productStore = useProductStore()
 const cartStore = useCartStore()

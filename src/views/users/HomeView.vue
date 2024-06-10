@@ -1,8 +1,8 @@
 <script setup>
 import UserLayout from '@/layouts/UserLayout.vue'
-import { useProductStore } from '@/stores/product';
+import { useProductStore } from '@/stores/user/product';
 import Product from '@/components/Product.vue'
-import { useCartStore } from '@/stores/carts';
+import { useCartStore } from '@/stores/user/carts';
 import { useRoute, useRouter } from 'vue-router';
 
 const cartStore = useCartStore()

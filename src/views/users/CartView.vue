@@ -1,7 +1,7 @@
 <script setup>
 import UserLayout from '@/layouts/UserLayout.vue'
 import Close from '@/components/icons/Close.vue'
-import { useCartStore } from '@/stores/carts';
+import { useCartStore } from '@/stores/user/carts';
 
 const cartStore = useCartStore()
 

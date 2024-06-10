@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
-import { useCartStore } from '@/stores/carts';
+import { useCartStore } from '@/stores/user/carts';
 
 const cartStore = useCartStore()
 const isLoggedIn = ref(false)

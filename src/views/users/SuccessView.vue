@@ -1,6 +1,6 @@
 <script setup>
 import UserLayout from '@/layouts/UserLayout.vue'
-import { useCartStore } from '@/stores/carts';
+import { useCartStore } from '@/stores/user/carts';
 import { onMounted, ref } from 'vue';
 
 const cartStore = useCartStore()

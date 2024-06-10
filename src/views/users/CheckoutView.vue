@@ -1,6 +1,6 @@
 <script setup>
 import UserLayout from '@/layouts/UserLayout.vue'
-import { useCartStore } from '@/stores/carts';
+import { useCartStore } from '@/stores/user/carts';
 import { reactive } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
 

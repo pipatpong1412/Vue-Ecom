@@ -29,7 +29,7 @@ export const useAdminProductStore = defineStore('product', {
 
         updateProduct(index, productData) {
 
-            const fields = ['name', 'image', 'price',
+            const fields = ['name', 'imageUrl', 'price',
                 'quantity', 'remainQuantity', 'status']
 
             for (let field of fields) {

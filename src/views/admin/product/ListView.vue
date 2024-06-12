@@ -39,7 +39,7 @@ onMounted(() => {
             <Table :headers="['Name', 'Image', 'Price', 'Status', 'Quantity', 'UpdatedAt', '']">
                 <tr v-for="(product, index) in adminProduct.list">
                     <th>{{ product.name }}</th>
-                    <td><img :src="product.image" class="w-12"></td>
+                    <td><img :src="product.imageUrl" class="w-12"></td>
                     <td>{{ product.price }}</td>
                     <td>
                         <div class="badge" :class="product.status === 'open' ? ' badge-success' : ' badge-error'">

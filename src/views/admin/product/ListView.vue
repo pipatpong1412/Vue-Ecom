@@ -1,9 +1,10 @@
 <script setup>
 
 import AdminLayout from '@/layouts/AdminLayout.vue';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import Trash from '@/components/icons/Trash.vue'
 import Edit from '@/components/icons/Edit.vue'
+import Table from '@/components/Table.vue'
 import { useAdminProductStore } from '@/stores/admin/product';
 
 // const products = ref([
@@ -20,6 +21,10 @@ import { useAdminProductStore } from '@/stores/admin/product';
 
 const adminProduct = useAdminProductStore()
 
+onMounted(() => {
+    adminProduct.loadProducts()
+})
+
 </script>
 
 
@@ -29,43 +34,30 @@ const adminProduct = useAdminProductStore()
             <div class="flex items-center justify-between">
                 <div class="text-3xl font-bold">Product</div>
                 <RouterLink :to="{ name: 'admin-product-create' }" class="btn btn-neutral">Add New</RouterLink>
-            </div>
+                </div>
             <div class="divider" />
-            <div class="overflow-x-auto">
-                <table class="table">
-                    <!-- head -->
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Image</th>
-                            <th>Price</th>
-                            <th>status</th>
-                            <th>Quantity</th>
-                            <th>Updated At</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="product in adminProduct.list">
-                            <th>{{ product.name }}</th>
-                            <td><img :src="product.image" class="w-12"></td>
-                            <td>{{ product.price }}</td>
-                            <td>
-                                <div class="badge badge-success">
-                                    {{ product.status }}
-                                </div>
-                            </td>
-                            <td>{{ product.quantity }}/{{ product.remailQuantity }}</td>
-                            <td>{{ product.updatedAt }}</td>
-                            <td>
-                                <div class="flex items-center">
-                                    <Edit class="btn btn-ghost w-12" />
-                                    <Trash class="btn btn-ghost w-12" />
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            <Table :headers="['Name', 'Image', 'Price', 'Status', 'Quantity', 'UpdatedAt', '']">
+                <tr v-for="(product, index) in adminProduct.list">
+                    <th>{{ product.name }}</th>
+                    <td><img :src="product.image" class="w-12"></td>
+                    <td>{{ product.price }}</td>
+                    <td>
+                        <div class="badge" :class="product.status === 'open' ? ' badge-success' : ' badge-error'">
+                            {{ product.status }}
+                        </div>
+                    </td>
+                    <td>{{ product.quantity }}/{{ product.remailQuantity }}</td>
+                    <td>{{ product.updatedAt }}</td>
+                    <td>
+                        <div class="flex items-center">
+                            <RouterLink :to="{ name: 'admin-product-update', params: { id: index } }">
+                                <Edit class="btn btn-ghost w-12" />
+                            </RouterLink>
+                            <Trash @click="adminProduct.removeProduct(index)" class="btn btn-ghost w-12" />
+                        </div>
+                    </td>
+                </tr>
+            </Table>
         </div>
     </AdminLayout>
 </template>

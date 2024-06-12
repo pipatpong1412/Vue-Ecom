@@ -2,11 +2,28 @@
 
 import AdminLayout from '@/layouts/AdminLayout.vue';
 import { useAdminProductStore } from '@/stores/admin/product';
-import { reactive } from 'vue';
-import { useRouter } from 'vue-router';
+import { onMounted, reactive, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
 const adminProductStore = useAdminProductStore()
 const router = useRouter()
+const route = useRoute()
+const productId = ref(-1)
+const mode = ref('Add')
+
+onMounted(() => {
+    if (route.params.id) {
+        productId.value = parseInt(route.params.id)
+        mode.value = 'Edit'
+        const selectedProduct = adminProductStore.getProduct(productId.value)
+        productData.name = selectedProduct.name
+        productData.image = selectedProduct.image
+        productData.price = selectedProduct.price
+        productData.quantity = selectedProduct.quantity
+        productData.about = selectedProduct.about
+        productData.status = selectedProduct.status
+    }
+})
 
 const formData = [
     {
@@ -41,9 +58,14 @@ const productData = reactive({
 })
 
 const addProduct = () => {
-    adminProductStore.addProduct(productData)
-    alert('New Product Created')
-    router.push({name: 'admin-products-list'})
+    if (mode.value === 'Edit') {
+        adminProductStore.updateProduct(productId.value, productData)
+        router.push({ name: 'admin-products-list' })
+
+    } else {
+        adminProductStore.addProduct(productData)
+        router.push({ name: 'admin-products-list' })
+    }
 }
 
 </script>
@@ -52,7 +74,7 @@ const addProduct = () => {
 <template>
     <AdminLayout>
         <div class="shadow-xl p-8">
-            <div class="font-bold text-3xl">Add Product</div>
+            <div class="font-bold text-3xl">{{ mode }} Product</div>
             <div class="divider"></div>
             <div class="grid grid-cols-2 gap-x-4">
                 <label v-for="(form, index) in formData" :key="index" class="form-control w-full">
@@ -70,7 +92,7 @@ const addProduct = () => {
             </select>
             <div class="mt-4 flex justify-end">
                 <button class="btn btn-ghost">Back</button>
-                <button @click="addProduct()" class="btn btn-neutral">Add</button>
+                <button @click="addProduct()" class="btn btn-neutral">{{ mode }}</button>
             </div>
         </div>
     </AdminLayout>

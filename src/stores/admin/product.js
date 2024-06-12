@@ -2,20 +2,21 @@ import { defineStore } from "pinia";
 
 export const useAdminProductStore = defineStore('product', {
     state: () => ({
-        list: [
-            {
-                name: 'Apple',
-                image: 'https://hips.hearstapps.com/hmg-prod/images/red-fresh-apple-isolated-on-white-background-royalty-free-image-1627314996.jpg',
-                price: 100,
-                quantity: 20,
-                remailQuantity: 10,
-                status: 'open',
-                updatedAt: (new Date()).toISOString()
-            }
-        ]
+        list: [],
+        loaded: false
     }),
     actions: {
+        loadProducts() {
+            const products = localStorage.getItem('admin-products')
+            if (products) {
+                this.list = JSON.parse(products)
+                this.loaded = true
+            }
+        },
         getProduct(index) {
+            if (!this.loaded) {
+                this.loadProducts()
+            }
             return this.list[index]
         },
 
@@ -23,6 +24,7 @@ export const useAdminProductStore = defineStore('product', {
             productData.remailQuantity = productData.quantity
             productData.updatedAt = (new Date()).toISOString()
             this.list.push(productData)
+            localStorage.setItem('admin-products', JSON.stringify(this.list))
         },
 
         updateProduct(index, productData) {
@@ -33,10 +35,12 @@ export const useAdminProductStore = defineStore('product', {
             this.list[index].remailQuantity = productData.remailQuantity
             this.list[index].status = productData.status
             this.list[index].updatedAt = (new Date()).toISOString()
+            localStorage.setItem('admin-products', JSON.stringify(this.list))
         },
 
         removeProduct(index) {
             this.list.splice(index, 1)
+            localStorage.setItem('admin-products', JSON.stringify(this.list))
         }
     }
 })

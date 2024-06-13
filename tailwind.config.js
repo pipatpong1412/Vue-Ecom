@@ -1,17 +1,16 @@
 /** @type {import('tailwindcss').Config} */
-export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{vue,js,ts,jsx,tsx}",
-  ],
+module.exports = {
+  purge: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
+  darkMode: false,
+  content: [],
   theme: {
     extend: {},
   },
   plugins: [
-    require('daisyui'),
+    require("daisyui")
   ],
   daisyui: {
-    themes: ['cupcake']
-  }
+    themes: ["cupcake"]
+  },
 }
 

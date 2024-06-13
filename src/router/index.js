@@ -1,20 +1,23 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import CartView from '@/views/users/CartView.vue'
-import CheckoutView from '@/views/users/CheckoutView.vue'
-import HomeView from '@/views/users/HomeView.vue'
-import ProfileView from '@/views/users/ProfileView.vue'
-import SearchView from '@/views/users/SearchView.vue'
-import SuccessView from '@/views/users/SuccessView.vue'
-import LoginView from '@/views/admin/LoginView.vue'
-import DashboardView from '@/views/admin/DashboardView.vue'
 
-import AdminOrderDetail from '@/views/admin/order/DetailView.vue'
-import AdminOrderList from '@/views/admin/order/ListView.vue'
+import AdminLogin from '@/views/admin/LoginView.vue'
+import AdminDashboard from '@/views/admin/DashboardView.vue'
+
 import AdminProductList from '@/views/admin/product/ListView.vue'
 import AdminProductUpdate from '@/views/admin/product/UpdateView.vue'
+
+import AdminOrderList from '@/views/admin/order/ListView.vue'
+import AdminOrderDetail from '@/views/admin/order/DetailView.vue'
+
 import AdminUserList from '@/views/admin/user/ListView.vue'
 import AdminUserUpdate from '@/views/admin/user/UpdateView.vue'
 
+import Home from '@/views/user/HomeView.vue'
+import Search from '@/views/user/SearchView.vue'
+import Profile from '@/views/user/ProfileView.vue'
+import Success from '@/views/user/SuccessView.vue'
+import Checkout from '@/views/user/CheckoutView.vue'
+import Cart from '@/views/user/CartView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -22,78 +25,78 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView
-    },
-    {
-      path: '/profile',
-      name: 'profile',
-      component: ProfileView
+      component: Home
     },
     {
       path: '/search',
       name: 'search',
-      component: SearchView
+      component: Search
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: Profile
     },
     {
       path: '/cart',
       name: 'cart',
-      component: CartView
+      component: Cart
     },
     {
       path: '/checkout',
       name: 'checkout',
-      component: CheckoutView
+      component: Checkout
     },
     {
       path: '/success',
       name: 'success',
-      component: SuccessView
+      component: Success
     },
     {
       path: '/admin/login',
       name: 'admin-login',
-      component: LoginView
+      component: AdminLogin
     },
     {
       path: '/admin/dashboard',
       name: 'admin-dashboard',
-      component: DashboardView
+      component: AdminDashboard
+    },
+    {
+      path: '/admin/products',
+      name: 'admin-products',
+      component: AdminProductList
+    },
+    {
+      path: '/admin/products/create',
+      name: 'admin-products-create',
+      component: AdminProductUpdate
+    },
+    {
+      path: '/admin/products/edit/:id',
+      name: 'admin-products-update',
+      component: AdminProductUpdate
     },
     {
       path: '/admin/orders',
-      name: 'admin-orders-list',
+      name: 'admin-orders',
       component: AdminOrderList
     },
     {
-      path: '/admin/orders/detail/:id',
+      path: '/admin/orders/:id',
       name: 'admin-order-detail',
       component: AdminOrderDetail
     },
     {
-      path: '/admin/products/list',
-      name: 'admin-products-list',
-      component: AdminProductList
-    },
-    {
-      path: '/admin/product/create',
-      name: 'admin-product-create',
-      component: AdminProductUpdate
-    },
-    {
-      path: '/admin/product/update/:id',
-      name: 'admin-product-update',
-      component: AdminProductUpdate
-    },
-    {
-      path: '/admin/users/list',
-      name: 'admin-users-list',
+      path: '/admin/users',
+      name: 'admin-users',
       component: AdminUserList
     },
     {
-      path: '/admin/users/update/:id',
+      path: '/admin/users/:id',
       name: 'admin-user-update',
       component: AdminUserUpdate
-    },
+    }
   ]
 })
 

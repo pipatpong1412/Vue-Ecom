@@ -1,84 +1,84 @@
 <script setup>
+import { onMounted, ref, reactive } from 'vue'
+import { useRoute } from 'vue-router'
+import { useUserStore } from '@/stores/admin/user'
+import { useEventStore } from '@/stores/event'
+import AdminLayout from '@/layouts/AdminLayout.vue'
 
-import AdminLayout from '@/layouts/AdminLayout.vue';
-import { useAdminUserStore } from '@/stores/admin/user';
-import { onMounted, reactive, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+const userStore = useUserStore()
+const eventStore = useEventStore()
 
-
-const adminUserStore = useAdminUserStore()
 const route = useRoute()
-const router = useRouter()
+
 const userId = ref(-1)
-const userData = reactive({
-    fullname: '',
-    role: '',
-    status: ''
-})
+let userData = reactive({})
 
 onMounted(() => {
-    if (route.params.id) {
-        userId.value = parseInt(route.params.id)
-        const selectedUser = adminUserStore.getUser(userId.value)
-
-        userData.fullname = selectedUser.fullname
-        userData.role = selectedUser.role
-        userData.status = selectedUser.status
-    }
+  if (route.params.id) {
+    userId.value = route.params.id
+    userData = userStore.getUser(userId.value)
+    console.log('userData', userData)
+  }
 })
 
 const updateUser = () => {
-    adminUserStore.updateUser(userId.value, userData)
-    router.push({ name: 'admin-users-list' })
+  userStore.updateUser(userId.value, userData)
+  eventStore.popupMessage('success', 'Update Product successful!')
 }
-
-const formData = [
-    {
-        name: 'Name',
-        field: 'fullname',
-        type: 'text'
-    },
-    {
-        name: 'Role',
-        field: 'role',
-        type: 'select',
-        dropdownList: ['admin', 'moderator', 'user']
-    },
-    {
-        name: 'Status',
-        field: 'status',
-        type: 'select',
-        dropdownList: ['active', 'inactive']
-    },
-]
-
 
 </script>
 
-
 <template>
-    <AdminLayout>
-        <div class="shadow-xl p-8 mt-4">
-            <div class="text-3xl font-bold">Update User ID: </div>
-            <div class="divider"></div>
-            <div class="grid grid-cols-1 gap-x-4">
-                <label v-for="form in formData" class="form-control w-full">
-                    <div class="label">
-                        <span class="label-text">{{ form.name }}</span>
-                    </div>
-                    <input v-model="userData[form.field]" v-if="form.type === 'text'" type="text"
-                        class="input input-bordered w-full" />
-                    <select v-model="userData[form.field]" v-if="form.type === 'select'"
-                        class="input input-bordered w-full">
-                        <option v-for="item in form.dropdownList" :value="item">{{ item }}</option>
-                    </select>
+  <AdminLayout>
+    <div class="flex pt-8 px-6">
+      <div class="card w-full p-6 bg-base-100 shadow-xl mt-2">
+        <div class="text-xl font-semibold">Update user id: {{ userId }}</div>
+        <div class="divider"></div>
 
-                </label>
-            </div>
-            <div class="mt-4 flex justify-end">
-                <button class="btn btn-ghost">Back</button>
-                <button @click="updateUser()" class="btn btn-neutral">Update</button>
-            </div>
+        <div class="form-control w-full">
+          <label class="label">
+            <span class="label-text text-base-content">Name</span>
+          </label>
+          <input
+            type="text"
+            placeholder=""
+            class="input input-bordered w-full"
+            v-model="userData.name"
+          />
         </div>
-    </AdminLayout>
+
+        <div class="form-control w-full">
+          <label class="label">
+            <span class="label-text text-base-content">Role</span>
+          </label>
+          <select class="select select-bordered w-full" v-model="userData.role">
+            <option disabled selected>Select Role</option>
+            <option value="admin">Admin</option>
+            <option value="moderator">Moderator</option>
+            <option value="member">Member</option>
+          </select>
+        </div>
+
+        <div class="form-control w-full">
+          <label class="label">
+            <span class="label-text text-base-content">Status</span>
+          </label>
+          <select class="select select-bordered w-full" v-model="userData.status">
+            <option disabled selected>Status</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
+
+        <div class="mt-4 flex justify-end">
+          <RouterLink to="/admin/users" class="btn btn-ghost">
+            Back
+          </RouterLink>
+          <button @click="updateUser()" class="btn btn-primary ml-4">
+            Update
+          </button>
+        </div>
+      </div>
+    </div>
+  </AdminLayout>
 </template>

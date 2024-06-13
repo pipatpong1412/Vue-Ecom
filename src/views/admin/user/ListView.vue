@@ -1,45 +1,66 @@
 <script setup>
+import { useUserStore } from '@/stores/admin/user'
+import { RouterLink } from 'vue-router'
 
-import AdminLayout from '@/layouts/AdminLayout.vue';
-import Trash from '@/components/icons/Trash.vue'
-import Edit from '@/components/icons/Edit.vue'
-import Table from '@/components/Table.vue'
-import { useAdminUserStore } from '@/stores/admin/user';
+import AdminLayout from '@/layouts/AdminLayout.vue'
 
-const adminUserStore = useAdminUserStore()
+const userStore = useUserStore()
 
-const changeStatus = (index) => {
-    let selectedUser = adminUserStore.list[index]
-    selectedUser.status = selectedUser.status === 'active' ? 'inactive' : 'active'
-    adminUserStore.updateUser(selectedUser)
+const toggleStatus = (index) => {
+  const updateUser = userStore.list[index]
+  updateUser.status = updateUser.status === 'inactive' ? 'active' : 'inactive'
+  userStore.updateUser(index, updateUser)
 }
-
 </script>
 
-
 <template>
-    <AdminLayout>
-        <div class="m-8">
-            <div class="text-3xl font-bold mb-4">User</div>
-            <Table :headers="['Name', 'Role', 'Status', 'Updated At', '']">
-                <tr v-for="(user, index) in adminUserStore.list">
-                    <td>{{ user.fullname }}</td>
-                    <td>{{ user.role }}</td>
-                    <td>
-                        <div class="badge badge-success">{{ user.status }}</div>
-                    </td>
-                    <td>{{ user.updatedAt }}</td>
-                    <td>
-                        <div class="flex gap-2">
-                            <RouterLink :to="{ name: 'admin-user-update', params: { id: index } }" class="btn btn-neutral">
-                                Edit</RouterLink>
-                            <button @click="changeStatus(index)" class="btn btn-ghost">
-                                {{ user.status === 'active' ? 'Disable' : 'Enable' }}
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            </Table>
+  <AdminLayout>
+    <div class="flex-1 pt-8 px-6 bg-base-100">
+      <div class="card w-full p-6 mt-2">
+        <div class="text-xl font-semibold inline-block">
+          User
         </div>
-    </AdminLayout>
+        <div class="divider mt-2"></div>
+        <div class="h-full w-full pb-6 bg-base-100">
+          <div class="overflow-x-auto w-full">
+            <table class="table w-full">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Role</th>
+                  <th>Status</th>
+                  <th>Updated At</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(user, index) in userStore.list" :key="index">
+                  <td>
+                    <div class="font-bold">{{ user.name }}</div>
+                  </td>
+                  <td>{{ user.role }}</td>
+                  <td>
+                    <div class="badge" :class="user.status === 'active' ? 'badge-success' : 'badge-ghost'">
+                      {{ user.status }}
+                    </div>
+                  </td>
+                  <td>{{ user.updatedAt }}</td>
+                  <td>
+                    <RouterLink :to="{ name: 'admin-user-update', params: { id: index } }">
+                      <button class="btn">
+                        Edit
+                      </button>
+                    </RouterLink>
+                    <button @click="toggleStatus(index)" class="btn mx-2">
+                      {{ user.status === 'active' ? 'Enable' : 'Disable' }}
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </AdminLayout>
 </template>

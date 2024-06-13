@@ -1,20 +1,23 @@
 import { defineStore } from 'pinia'
 
-export const useProductStore = defineStore('product', {
+export const useUserProductStore = defineStore('user-product', {
   state: () => ({
     list: [],
     loaded: false
   }),
   actions: {
-    loadProducts() {
-      const products = localStorage.getItem('admin-products')
-      if (products) {
-        this.list = JSON.parse(products)
-        this.loaded = true
+    loadProduct () {
+      const productList = localStorage.getItem('product-data')
+      if (productList) {
+        this.list = JSON.parse(productList)
       }
+      this.loaded = true
     },
-    finterProducts(searchText) {
-      return this.list.filter(product => product.name.includes(searchText))
+    filterProducts (searchName) {
+      if (!this.loaded) {
+        this.loadProduct()
+      }
+      return this.list.filter(product => product.name.includes(searchName))
     }
   }
 })

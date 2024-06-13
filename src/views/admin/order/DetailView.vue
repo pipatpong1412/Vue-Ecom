@@ -1,72 +1,80 @@
 <script setup>
+import { onMounted , ref, reactive } from 'vue'
+import { useRoute } from 'vue-router'
+import { useOrderStore } from '@/stores/admin/order'
 
-import AdminLayout from '@/layouts/AdminLayout.vue';
-import { useAdminOrderStore } from '@/stores/admin/order';
-import { onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import AdminLayout from '@/layouts/AdminLayout.vue'
 
-const adminOrderStore = useAdminOrderStore()
-const orderId = ref(-1)
 const route = useRoute()
+const orderStore = useOrderStore()
 
-const orderData = ref({
-    products: []
+const orderId = ref(-1)
+let orderData = reactive({
+  products: []
 })
 
 onMounted(() => {
-    if (route.params.id) {
-        orderId.value = parseInt(route.params.id)
-        const selectedOrder = adminOrderStore.getOrder(orderId.value)
-        orderData.value = selectedOrder
-    }
+  if (route.params.id) {
+    orderId.value = route.params.id
+    orderData = orderStore.getOrder(orderId.value)
+  }
 })
-
 </script>
 
-
 <template>
-    <AdminLayout>
-        <div class="shadow-xl p-8 mt-4">
-            <div class="text-xl font-bold">Order Detail</div>
-            <div class="divider"></div>
-            <div class="grid grid-cols-2 gap-2">
-                <div>
-                    <div class="font-bold">Order Date</div>
-                    <div>{{ orderData.updatedAt }}</div>
-                </div>
-                <div>
-                    <div class="font-bold">Order Number</div>
-                    <div>{{ orderData.no }}</div>
-                </div>
-                <div>
-                    <div class="font-bold">Payment Method</div>
-                    <div>{{ orderData.paymentMethod }}</div>
-                </div>
-                <div>
-                    <div class="font-bold">Address</div>
-                    <div>{{ orderData.address }}</div>
-                </div>
-            </div>
-            <div class="divider"></div>
-            <div v-for="(product, index) in orderData.products" :key="index"
-                class="grid grid-cols-4 gap-4 p-4 items-center">
-                <div class="mx-auto"><img class="w-20 p-2" :src="product.imageUrl"></div>
-                <div>
-                    <div><b>{{ product.name }}</b></div>
-                    <div>{{ product.description }}</div>
-                </div>
-                <div>จำนวน {{ product.quantity }} ชิ้น</div>
-                <div>{{ product.price }} บาท</div>
-            </div>
-            <div class="divider"></div>
-            <div class="justify-between flex">
-                <div class="font-bold">ราคาสินค้าทั้งหมด</div>
-                <div>{{ orderData.totalPrice }}</div>
-            </div>
-            <div class="divider"></div>
-            <div class="flex justify-end">
-                <RouterLink class="btn btn-ghost" :to="{ name: 'admin-orders-list' }">Back</RouterLink>
-            </div>
+  <AdminLayout>
+    <div class="flex pt-8 px-6">
+      <div class="card w-full p-6 bg-base-100 shadow-xl">
+        <div>
+          <h1 class="text-3xl font-bold">Order detail id: {{ orderId }}</h1>
         </div>
-    </AdminLayout>
+        <div class="divider"></div>
+        <div class="flex mb-2">
+          <div class="flex-1">
+            <div class="font-bold">Order date</div>
+            <div>{{ orderData.updatedAt }}</div>
+          </div>
+          <div class="flex-1">
+            <div class="font-bold">Order Number</div>
+            <div>{{ orderData.no }}</div>
+          </div>
+        </div>
+        <div class="flex">
+          <div class="flex-1">
+            <div class="font-bold">Payment method</div>
+            <div>{{ orderData.paymentMethod }}</div>
+          </div>
+          <div class="flex-1">
+            <div class="font-bold">Address</div>
+            <div>{{ orderData.address }}</div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div v-for="(product, index) in orderData.products" class="flex items-center my-2" :key="index">
+          <div>
+            <img
+              class="w-24"
+              :src="product.imageUrl"
+            />
+          </div>
+          <div class="flex-1 ml-4">
+            <div class="font-bold">{{ product.name }}</div>
+            <div>{{ product.description }}</div>
+          </div>
+          <div class="flex-1">จำนวน {{ product.quantity }} ชิ้น</div>
+          <div>{{ product.price }} ฿</div>
+        </div>
+        <div class="divider"></div>
+        <div class="flex align-middle justify-between mb-2">
+          <div class="font-bold">ราคาสินค้าทั้งหมด</div>
+          <div>{{ orderData.totalPrice }} ฿</div>
+        </div>
+        <div class="flex justify-end">
+          <RouterLink to="/admin/orders" class="btn btn-ghost">
+            Back
+          </RouterLink>
+        </div>
+      </div>
+    </div>
+  </AdminLayout>
 </template>

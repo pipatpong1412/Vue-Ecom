@@ -1,55 +1,56 @@
 <script setup>
-import { onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { RouterLink } from 'vue-router'
+import { ref } from 'vue'
+import { useRoute } from 'vue-router'
 
-const activeMenu = ref('')
 const route = useRoute()
 
-onMounted(() => {
-    activeMenu.value = route.name
-})
-
-const menus = [
-    {
-        name: 'Dashboard',
-        routeName: 'admin-dashboard'
-    },
-    {
-        name: 'User',
-        routeName: 'admin-users-list'
-    },
-    {
-        name: 'Product',
-        routeName: 'admin-products-list'
-    },
-    {
-        name: 'Order',
-        routeName: 'admin-orders-list'
-    },
-    {
-        name: 'Logout',
-        routeName: 'admin-login'
-    },
+const pageData = [
+  {
+    name: 'Dashboard',
+    route: '/admin/dashboard',
+  },
+  {
+    name: 'Product',
+    route: '/admin/products',
+  },
+  {
+    name: 'Order',
+    route: '/admin/orders',
+  },
+  {
+    name: 'User',
+    route: '/admin/users',
+  },
+  {
+    name: 'Logout',
+    route: '/admin/login',
+  },
 ]
+
+const currentPath = ref('')
+currentPath.value = route.path
 </script>
 
 <template>
-    <div class="drawer drawer-open">
-        <input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
-        <div class="drawer-content">
-            <slot></slot>
-        </div>
-        <div class="drawer-side">
-            <label for="my-drawer-2" aria-label="close sidebar" class="drawer-overlay"></label>
-            <ul class="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
-                <!-- Sidebar content here -->
-                <li class="text-2xl font-bold"><a>ViewShop Backoffice</a></li>
-                <li v-for="menu in menus">
-                    <RouterLink :to="{ name: menu.routeName }" :class="menu.routeName === activeMenu ? 'active' : ''">
-                        {{ menu.name }}</RouterLink>
-                </li>
-            </ul>
-
-        </div>
+  <div class="drawer drawer-open">
+    <input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
+    <div class="drawer-content p-4">
+      <slot></slot>
     </div>
+    <div class="drawer-side">
+      <label for="my-drawer-2" class="drawer-overlay"></label>
+      <ul class="menu p-4 w-60 h-full bg-base-200 text-base-content">
+        <!-- Sidebar content here -->
+        <li class="mb-2 font-semibold text-2xl">
+          <div>Admin {{ pageName }}</div>
+        </li>
+        <li v-for="page in pageData">
+          <RouterLink :to="page.route" :class="currentPath === page.route ? 'active' : ''">
+            {{ page.name }}
+          </RouterLink>
+        </li>
+      </ul>
+    </div>
+  </div>
 </template>
